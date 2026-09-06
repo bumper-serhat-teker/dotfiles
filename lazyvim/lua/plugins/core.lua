@@ -72,6 +72,11 @@ local function apply_theme(mode)
   else
     apply_onedark(mode)
   end
+  -- Both schemes' load() set highlights + colors_name but do NOT emit the
+  -- ColorScheme event. Fire it so bufferline (and anything else keyed on
+  -- ColorScheme) recomputes its highlights; otherwise the tabline stays on the
+  -- previous scheme's colors (e.g. dark tabs over a light buffer).
+  vim.api.nvim_exec_autocmds("ColorScheme", { pattern = vim.g.colors_name })
   applied_key = mode .. ":" .. scheme
 end
 -- }}}
